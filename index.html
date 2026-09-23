@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes · Aplicación Local para Android</title>
+  <meta name="description" content="Aplicación nativa de notas para Android con base de datos SQLite Room local, gestión por carpetas, alarmas programadas exactas y almacenamiento interno de imágenes.">
+
+  <!-- Preconnect and Google Fonts: Newsreader, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231C1C1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3Cline x1='16' y1='13' x2='8' y2='13'%3E%3C/line%3E%3Cline x1='16' y1='17' x2='8' y2='17'%3E%3C/line%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Design Read: Local Android utility landing for focused users, warm monochrome editorial palette, restrained micro-interactions, no AI gradients, zero emojis. -->
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="#" class="brand-link">
+        <span class="brand-icon">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+        </span>
+        <span>Notes</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#caracteristicas">Características</a></li>
+        <li><a href="#arquitectura">Almacenamiento Local</a></li>
+        <li><a href="#instalacion">Instalación</a></li>
+      </ul>
+
+      <a href="notes-app.apk" download="notes-app.apk" class="nav-cta" id="nav-download-button">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Descargar APK (12.0 MB)</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-layout">
+        <div class="hero-content">
+          <div class="hero-meta-badge">
+            <span class="badge-pulse"></span>
+            <span>Versión 1.0.0 compilada · Android 8.0 o superior</span>
+          </div>
+
+          <h1 class="hero-title">
+            Tus notas y recordatorios, <em>guardados únicamente</em> en tu teléfono.
+          </h1>
+
+          <p class="hero-lead">
+            Una herramienta nativa para organizar notas por carpetas, programar alertas del sistema y adjuntar fotografías. Diseñada bajo una arquitectura 100% local en SQLite, sin cuentas, sin publicidad y sin conexión obligatoria a internet.
+          </p>
+
+          <div class="download-cta-box">
+            <div class="cta-actions">
+              <a href="notes-app.apk" download="notes-app.apk" class="btn-primary-download" id="hero-download-button">
+                <svg class="icon-md" viewBox="0 0 24 24">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Descargar APK Directo</span>
+              </a>
+
+              <a href="#instalacion" class="btn-secondary-guide">
+                <svg class="icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>Instrucciones</span>
+              </a>
+            </div>
+
+            <div class="cta-specs">
+              <span>Archivo: notes-app.apk</span>
+              <span>·</span>
+              <span>Tamaño: 12.0 MB</span>
+              <span>·</span>
+              <span>Base local: Room v8</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone Mockup Display -->
+        <div class="phone-mockup-wrapper">
+          <div class="phone-device">
+            <div class="phone-screen">
+              <!-- Top bar -->
+              <div class="phone-status-bar">
+                <span>12:00</span>
+                <span>LTE · 98%</span>
+              </div>
+
+              <!-- In-App Header -->
+              <div class="phone-app-bar">
+                <h4>Todas las notas</h4>
+                <svg class="icon" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+
+              <!-- Folder Filter -->
+              <div class="folder-tabs">
+                <span class="folder-pill active">Todas</span>
+                <span class="folder-pill">Universidad</span>
+                <span class="folder-pill">Finanzas</span>
+                <span class="folder-pill">Lecturas</span>
+              </div>
+
+              <!-- Notes Feed -->
+              <div class="phone-notes-feed">
+                <!-- Card 1 -->
+                <div class="mockup-note-card">
+                  <div class="mockup-note-title">Revisión de entrega de proyecto</div>
+                  <div class="mockup-note-snippet">Validar persistencia de imágenes en almacenamiento interno y disparadores de AlarmManager.</div>
+                  <div class="mockup-note-meta">
+                    <span class="reminder-chip">
+                      <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                      </svg>
+                      25 sep, 10:00
+                    </span>
+                    <span class="date-stamp">Hoy</span>
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="mockup-note-card">
+                  <div class="mockup-note-title">Esquema de base de datos</div>
+                  <div class="mockup-note-image">
+                    <img src="diagrama_room.png" alt="Esquema Room de la base de datos">
+                  </div>
+                  <div class="mockup-note-snippet">Estructura con llave foránea y borrado en cascada configurado entre carpetas y notas.</div>
+                  <div class="mockup-note-meta">
+                    <span class="date-stamp">Ayer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Section -->
+    <section class="section-features" id="caracteristicas">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Especificaciones</span>
+          <h2 class="section-title">Diseñada para la utilidad real y la autonomía</h2>
+          <p class="section-subtitle">
+            Cada componente resuelve una necesidad cotidiana de captura y seguimiento sin añadir complejidad superflua.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Bento 1: Exact Alarms (Col 8) -->
+          <article class="bento-card col-8">
+            <div>
+              <span class="card-badge badge-blue">
+                <svg class="icon" viewBox="0 0 24 24">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span>AlarmManager del Sistema</span>
+              </span>
+              <h3>Recordatorios con Notificaciones Exactas</h3>
+              <p>
+                La aplicación programa alertas a nivel de sistema operativo utilizando <code>AlarmManager.setExactAndAllowWhileIdle</code>. Esto garantiza que las notificaciones se emitan con precisión en la fecha y hora indicadas, incluso si el dispositivo entra en modo de ahorro de batería o suspensión profunda (Doze Mode).
+              </p>
+            </div>
+            <div class="bento-detail-table">
+              <div class="detail-row">
+                <span class="detail-key">Compatibilidad</span>
+                <span class="detail-val">Android 13+ (POST_NOTIFICATIONS)</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-key">Comportamiento al borrar nota</span>
+                <span class="detail-val">Cancelación automática del PendingIntent</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento 2: Folder Validations (Col 4) -->
+          <article class="bento-card col-4">
+            <div>
+              <span class="card-badge badge-sage">
+                <svg class="icon" viewBox="0 0 24 24">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Organización</span>
+              </span>
+              <h3>Validación de Carpetas</h3>
+              <p>
+                Control formal de entradas: límite de 25 caracteres por carpeta, detección en tiempo real de nombres duplicados y prevención de registros vacíos.
+              </p>
+            </div>
+            <div class="bento-detail-table">
+              <div class="detail-row">
+                <span class="detail-key">Integridad</span>
+                <span class="detail-val">Borrado en cascada</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento 3: Local Image Storage (Col 6) -->
+          <article class="bento-card col-6">
+            <div>
+              <span class="card-badge badge-sand">
+                <svg class="icon" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>Almacenamiento Interno</span>
+              </span>
+              <h3>Persistencia de Fotografías</h3>
+              <p>
+                Las imágenes seleccionadas desde la galería se copian físicamente a la carpeta interna privada de la aplicación (<code>filesDir/note_images/</code>). Esto evita la pérdida de imágenes si el archivo original es movido o eliminado en la galería externa.
+              </p>
+            </div>
+            <div class="bento-detail-table">
+              <div class="detail-row">
+                <span class="detail-key">Formato</span>
+                <span class="detail-val">JPEG comprimido (85% calidad)</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-key">Acceso</span>
+                <span class="detail-val">Aislado al sandbox de la app</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento 4: Offline SQLite (Col 6) -->
+          <article class="bento-card col-6" id="arquitectura">
+            <div>
+              <span class="card-badge badge-terracotta">
+                <svg class="icon" viewBox="0 0 24 24">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+                <span>Privacidad Estricta</span>
+              </span>
+              <h3>Base de Datos Room SQLite</h3>
+              <p>
+                No requiere registro, conexión a servidores remotos ni sincronización en nubes externas. La base de datos relacional reside únicamente en el disco de tu dispositivo, garantizando tiempos de respuesta instantáneos y confidencialidad completa.
+              </p>
+            </div>
+            <div class="bento-detail-table">
+              <div class="detail-row">
+                <span class="detail-key">Motor</span>
+                <span class="detail-val">SQLite con Room DB v8</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-key">Dependencia de red</span>
+                <span class="detail-val">Cero (100% desconectado)</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation Steps Section -->
+    <section class="section-install" id="instalacion">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Guía de Instalación</span>
+          <h2 class="section-title">Cómo instalar el archivo APK en tu dispositivo</h2>
+          <p class="section-subtitle">
+            Al tratarse de una compilación directa fuera de Google Play, solo debes autorizar la instalación en tu teléfono.
+          </p>
+        </div>
+
+        <div class="install-steps">
+          <div class="step-card">
+            <span class="step-number">Paso 01</span>
+            <h4>Descarga el archivo</h4>
+            <p>
+              Toca el botón de descarga desde el navegador de tu teléfono Android para obtener el archivo <code>notes-app.apk</code> directamente.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-number">Paso 02</span>
+            <h4>Habilita orígenes desconocidos</h4>
+            <p>
+              Si el instalador del sistema te notifica un bloqueo de seguridad, presiona «Ajustes» y activa «Permitir desde esta fuente» para continuar.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-number">Paso 03</span>
+            <h4>Abre y utiliza</h4>
+            <p>
+              Finalizada la instalación, pulsa «Abrir». La base de datos local SQLite se inicializará automáticamente y podrás comenzar a tomar notas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to action bottom banner -->
+    <section class="section-cta-banner">
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-box-text">
+            <h3>¿Listo para probar la aplicación?</h3>
+            <p>Archivo APK autónomo listo para ejecutarse en dispositivos con Android 8.0 Oreo o posterior.</p>
+          </div>
+          <div>
+            <a href="notes-app.apk" download="notes-app.apk" class="btn-primary-download" id="bottom-download-button">
+              <svg class="icon-md" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Descargar APK (12.0 MB)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimalist Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <p><strong>Notes</strong> · Aplicación desarrollada en Kotlin y Jetpack Compose.</p>
+      </div>
+      <div class="footer-meta">
+        <span>ID: com.example.proyectofinal</span>
+        <span>·</span>
+        <span>Arquitectura: MVVM + Room DB</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
